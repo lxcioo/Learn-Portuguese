@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   X,
-  Heart,
+  HeartCrack,
   Volume2,
   CheckCircle2,
   XCircle,
@@ -27,7 +27,7 @@ import { LeitnerService } from '@/src/models/services/LeitnerService';
 import { ProgressService } from '@/src/models/services/ProgressService';
 import { StreakService } from '@/src/models/services/StreakService';
 import { SoundEffects, speakPortuguese, playExerciseAudio, stopCurrentAudio } from '@/src/utils/audio';
-import { getLessonTip, LessonTip } from '@/src/models/data/lessonTips';
+import { getExerciseTip, getLessonTip, LessonTip } from '@/src/models/data/lessonTips';
 import { findCulturalFact, CulturalFact } from '@/src/models/data/culturalContent';
 import { CulturalCardModal } from './CulturalCardModal';
 
@@ -119,9 +119,6 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     };
   }, []);
 
-  // Retrieve contextual pedagogical tip
-  const lessonTip: LessonTip = useMemo(() => getLessonTip(lessonId), [lessonId]);
-
   // Initialize queue
   useEffect(() => {
     let list = [...exercises];
@@ -136,7 +133,12 @@ export const LessonModal: React.FC<LessonModalProps> = ({
   const currentExercise = queue[currentIndex];
   const progressPercent = queue.length > 0 ? (currentIndex / queue.length) * 100 : 0;
 
-  // Detect cultural facts in current exercise vocabulary, question, or prompt
+  // Retrieve contextual pedagogical tip directly matching the active exercise
+  const lessonTip: LessonTip = useMemo(() => {
+    return getExerciseTip(currentExercise, lessonId);
+  }, [currentExercise, lessonId]);
+
+  // Detect cultural facts in current exercise vocabulary, question, prompt, or dialogue
   const detectedCulturalFact: CulturalFact | null = useMemo(() => {
     if (!currentExercise) return null;
     const texts = [
@@ -145,7 +147,11 @@ export const LessonModal: React.FC<LessonModalProps> = ({
       currentExercise.prompt || '',
       currentExercise.cardFront || '',
       currentExercise.cardBack || '',
-      ...(currentExercise.vocabulary?.map((v) => v.text) || []),
+      currentExercise.cardNotes || '',
+      currentExercise.dialogueContext || '',
+      currentExercise.dialoguePrompt || '',
+      ...(currentExercise.options || []),
+      ...(currentExercise.vocabulary?.flatMap((v) => [v.text, v.translation || '']) || []),
     ];
     return findCulturalFact(texts);
   }, [currentExercise]);
@@ -292,10 +298,39 @@ export const LessonModal: React.FC<LessonModalProps> = ({
       }
     } else {
       SoundEffects.playWrong();
+      setMistakes((prev) => prev + 1);
       setTimeout(() => {
         setSelectedPtId(null);
         setSelectedDeId(null);
       }, 550);
+    }
+  };
+
+  // Instant evaluation handler for multiple choice, listen choice, and dialogue
+  const handleSelectOption = async (idx: number) => {
+    if (isAnswerChecked || !currentExercise || !currentExercise.options) return;
+    SoundEffects.playTap();
+    setSelectedOption(idx);
+
+    const chosen = currentExercise.options[idx];
+    const isOptCorrect =
+      idx === currentExercise.correctAnswerIndex ||
+      chosen.trim().toLowerCase() === currentExercise.correctAnswer.trim().toLowerCase();
+
+    setIsCorrect(isOptCorrect);
+    setIsAnswerChecked(true);
+
+    if (isOptCorrect) {
+      SoundEffects.playCorrect();
+      if (currentExercise.vocabulary && currentExercise.vocabulary.length > 0) {
+        await LeitnerService.recordExerciseResult(currentExercise, true);
+      }
+    } else {
+      SoundEffects.playWrong();
+      setMistakes((prev) => prev + 1);
+      if (currentExercise.vocabulary && currentExercise.vocabulary.length > 0) {
+        await LeitnerService.recordExerciseResult(currentExercise, false);
+      }
     }
   };
 
@@ -396,7 +431,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     if (currentIndex + 1 < queue.length) {
       setCurrentIndex((i) => i + 1);
     } else {
-      const totalMistakes = mistakes + (isCorrect ? 0 : 1);
+      const totalMistakes = mistakes;
       let stars = 3;
       if (totalMistakes > 0 && totalMistakes <= 2) stars = 2;
       else if (totalMistakes > 2) stars = 1;
@@ -447,9 +482,12 @@ export const LessonModal: React.FC<LessonModalProps> = ({
           />
         </div>
 
-        {/* Mistakes / Lives count */}
-        <div className="flex items-center gap-1 text-rose-500 font-bold text-sm bg-rose-50 dark:bg-rose-950/40 px-2.5 py-1 rounded-full border border-rose-200 dark:border-rose-900/40">
-          <Heart className="w-4 h-4 fill-current" />
+        {/* Mistakes / Lives count (Broken Hearts) */}
+        <div
+          className="flex items-center gap-1.5 text-rose-500 font-bold text-sm bg-rose-50 dark:bg-rose-950/40 px-2.5 py-1 rounded-full border border-rose-200 dark:border-rose-900/40 shadow-xs"
+          title="Fehler"
+        >
+          <HeartCrack className="w-4 h-4 text-rose-500" />
           <span>{mistakes}</span>
         </div>
       </header>
@@ -462,6 +500,12 @@ export const LessonModal: React.FC<LessonModalProps> = ({
               {/* Exercise Mode Badge and Tip Trigger */}
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
+                  {currentExercise.type === 'multiple_choice' && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-800">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      MULTIPLE CHOICE
+                    </span>
+                  )}
                   {currentExercise.type === 'card' && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-800">
                       <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -626,7 +670,92 @@ export const LessonModal: React.FC<LessonModalProps> = ({
               )}
 
               {/* ========================================================= */}
-              {/* MODE 2: PURE LISTENING WITH CHOICES */}
+              {/* MODE 2: CLASSIC MULTIPLE CHOICE */}
+              {/* ========================================================= */}
+              {currentExercise.type === 'multiple_choice' && (
+                <div className="space-y-6">
+                  {/* Question Card */}
+                  <div className="p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-start justify-between gap-4">
+                    <div className="flex-1 space-y-1">
+                      <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
+                        Wähle die richtige Antwort:
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                        {currentExercise.question}
+                      </h3>
+                      {currentExercise.dialogueContext && (
+                        <p className="text-xs text-slate-500 dark:text-slate-400 pt-1">
+                          💡 {currentExercise.dialogueContext}
+                        </p>
+                      )}
+                    </div>
+
+                    {(currentExercise.audioText || currentExercise.correctAnswer) && (
+                      <button
+                        onClick={() => playQuestionAudio(false)}
+                        className="p-3.5 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl active:scale-95 transition-all shadow-sm flex-shrink-0"
+                        title="Aussprache anhören"
+                      >
+                        <Volume2 className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Multiple Choice Options with Instant Feedback */}
+                  <div className="space-y-2.5">
+                    {currentExercise.options?.map((option, idx) => {
+                      const isChosen = selectedOption === idx;
+                      const isOptionCorrect =
+                        idx === currentExercise.correctAnswerIndex ||
+                        option.trim().toLowerCase() === currentExercise.correctAnswer.trim().toLowerCase();
+
+                      let btnStyle =
+                        'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/50';
+
+                      if (isAnswerChecked) {
+                        if (isOptionCorrect) {
+                          btnStyle =
+                            'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 ring-2 ring-emerald-500/20';
+                        } else if (isChosen && !isOptionCorrect) {
+                          btnStyle =
+                            'border-rose-500 bg-rose-50 dark:bg-rose-950/50 text-rose-800 dark:text-rose-200 ring-2 ring-rose-500/20';
+                        } else {
+                          btnStyle =
+                            'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-600 opacity-60';
+                        }
+                      } else if (isChosen) {
+                        btnStyle =
+                          'border-amber-500 bg-amber-50/70 dark:bg-amber-950/40 text-slate-900 dark:text-white shadow-sm ring-1 ring-amber-500/20';
+                      }
+
+                      return (
+                        <button
+                          key={idx}
+                          disabled={isAnswerChecked}
+                          onClick={() => handleSelectOption(idx)}
+                          className={`w-full p-4 rounded-2xl border-2 text-left font-semibold text-base transition-all flex items-center justify-between shadow-xs active:scale-[0.99] ${btnStyle}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold text-slate-400">
+                              {idx + 1}
+                            </span>
+                            <span className="font-bold">{option}</span>
+                          </div>
+                          {isAnswerChecked && isOptionCorrect && (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                          )}
+                          {isAnswerChecked && isChosen && !isOptionCorrect && (
+                            <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 flex-shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* MODE 3: PURE LISTENING WITH CHOICES */}
               {/* ========================================================= */}
               {currentExercise.type === 'listen_choice' && (
                 <div className="space-y-6">
@@ -662,26 +791,53 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
                   {/* Multiple Choice Options */}
                   <div className="space-y-2.5">
-                    {currentExercise.options?.map((option, idx) => (
-                      <button
-                        key={idx}
-                        disabled={isAnswerChecked}
-                        onClick={() => {
-                          SoundEffects.playTap();
-                          setSelectedOption(idx);
-                        }}
-                        className={`w-full p-4 rounded-2xl border-2 text-left font-semibold text-base transition-all flex items-center justify-between ${
-                          selectedOption === idx
-                            ? 'border-sky-500 bg-sky-50/70 dark:bg-sky-950/40 text-slate-900 dark:text-white shadow-sm ring-1 ring-sky-500/20'
-                            : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
-                        }`}
-                      >
-                        <span>{option}</span>
-                        <span className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold text-slate-400">
-                          {idx + 1}
-                        </span>
-                      </button>
-                    ))}
+                    {currentExercise.options?.map((option, idx) => {
+                      const isChosen = selectedOption === idx;
+                      const isOptionCorrect =
+                        idx === currentExercise.correctAnswerIndex ||
+                        option.trim().toLowerCase() === currentExercise.correctAnswer.trim().toLowerCase();
+
+                      let btnStyle =
+                        'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/50';
+
+                      if (isAnswerChecked) {
+                        if (isOptionCorrect) {
+                          btnStyle =
+                            'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 ring-2 ring-emerald-500/20';
+                        } else if (isChosen && !isOptionCorrect) {
+                          btnStyle =
+                            'border-rose-500 bg-rose-50 dark:bg-rose-950/50 text-rose-800 dark:text-rose-200 ring-2 ring-rose-500/20';
+                        } else {
+                          btnStyle =
+                            'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-600 opacity-60';
+                        }
+                      } else if (isChosen) {
+                        btnStyle =
+                          'border-sky-500 bg-sky-50/70 dark:bg-sky-950/40 text-slate-900 dark:text-white shadow-sm ring-1 ring-sky-500/20';
+                      }
+
+                      return (
+                        <button
+                          key={idx}
+                          disabled={isAnswerChecked}
+                          onClick={() => handleSelectOption(idx)}
+                          className={`w-full p-4 rounded-2xl border-2 text-left font-semibold text-base transition-all flex items-center justify-between shadow-xs active:scale-[0.99] ${btnStyle}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold text-slate-400">
+                              {idx + 1}
+                            </span>
+                            <span>{option}</span>
+                          </div>
+                          {isAnswerChecked && isOptionCorrect && (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                          )}
+                          {isAnswerChecked && isChosen && !isOptionCorrect && (
+                            <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 flex-shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -848,26 +1004,53 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
                   {/* Options */}
                   <div className="space-y-2.5">
-                    {currentExercise.options?.map((option, idx) => (
-                      <button
-                        key={idx}
-                        disabled={isAnswerChecked}
-                        onClick={() => {
-                          SoundEffects.playTap();
-                          setSelectedOption(idx);
-                        }}
-                        className={`w-full p-4 rounded-2xl border-2 text-left font-semibold text-base transition-all flex items-center justify-between ${
-                          selectedOption === idx
-                            ? 'border-indigo-500 bg-indigo-50/70 dark:bg-indigo-950/40 text-slate-900 dark:text-white shadow-sm ring-1 ring-indigo-500/20'
-                            : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
-                        }`}
-                      >
-                        <span>{option}</span>
-                        <span className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold text-slate-400">
-                          {idx + 1}
-                        </span>
-                      </button>
-                    ))}
+                    {currentExercise.options?.map((option, idx) => {
+                      const isChosen = selectedOption === idx;
+                      const isOptionCorrect =
+                        idx === currentExercise.correctAnswerIndex ||
+                        option.trim().toLowerCase() === currentExercise.correctAnswer.trim().toLowerCase();
+
+                      let btnStyle =
+                        'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/50';
+
+                      if (isAnswerChecked) {
+                        if (isOptionCorrect) {
+                          btnStyle =
+                            'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 ring-2 ring-emerald-500/20';
+                        } else if (isChosen && !isOptionCorrect) {
+                          btnStyle =
+                            'border-rose-500 bg-rose-50 dark:bg-rose-950/50 text-rose-800 dark:text-rose-200 ring-2 ring-rose-500/20';
+                        } else {
+                          btnStyle =
+                            'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-600 opacity-60';
+                        }
+                      } else if (isChosen) {
+                        btnStyle =
+                          'border-indigo-500 bg-indigo-50/70 dark:bg-indigo-950/40 text-slate-900 dark:text-white shadow-sm ring-1 ring-indigo-500/20';
+                      }
+
+                      return (
+                        <button
+                          key={idx}
+                          disabled={isAnswerChecked}
+                          onClick={() => handleSelectOption(idx)}
+                          className={`w-full p-4 rounded-2xl border-2 text-left font-semibold text-base transition-all flex items-center justify-between shadow-xs active:scale-[0.99] ${btnStyle}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold text-slate-400">
+                              {idx + 1}
+                            </span>
+                            <span>{option}</span>
+                          </div>
+                          {isAnswerChecked && isOptionCorrect && (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                          )}
+                          {isAnswerChecked && isChosen && !isOptionCorrect && (
+                            <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 flex-shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -1038,17 +1221,17 @@ export const LessonModal: React.FC<LessonModalProps> = ({
             <div className="text-center py-12 text-slate-400">Lade Übung...</div>
           )}
 
-          {/* Action Check Button (Hidden for Card mode as it has dedicated button) */}
-          {currentExercise?.type !== 'card' && !isAnswerChecked && (
+          {/* Action Check Button (Hidden for Card & instant-selection choice modes) */}
+          {currentExercise?.type !== 'card' &&
+            currentExercise?.type !== 'multiple_choice' &&
+            currentExercise?.type !== 'listen_choice' &&
+            currentExercise?.type !== 'dialogue' &&
+            !isAnswerChecked && (
             <div className="pt-6">
               <button
                 disabled={
                   currentExercise?.type === 'match_pairs'
                     ? matchedPairIds.length < (currentExercise.matchingPairs?.length || 0)
-                    : currentExercise?.type === 'listen_choice' ||
-                      currentExercise?.type === 'dialogue' ||
-                      currentExercise?.type === 'multiple_choice'
-                    ? selectedOption === null
                     : currentExercise?.type === 'scramble' || useWordBank
                     ? selectedTokens.length === 0
                     : !userInput.trim()
