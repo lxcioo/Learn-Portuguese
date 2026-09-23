@@ -146,6 +146,24 @@ export function getGoogleTranslateTtsUrls(text: string, lang = 'pt-PT'): string[
   ];
 }
 
+/**
+ * Creates an HTMLAudioElement with referrerpolicy="no-referrer" to prevent
+ * third-party CDN / Google Translate TTS referer 404 blocks.
+ */
+export function createAudioElement(url?: string): HTMLAudioElement {
+  const audio = new Audio();
+  try {
+    audio.setAttribute('referrerpolicy', 'no-referrer');
+    (audio as any).referrerPolicy = 'no-referrer';
+  } catch {
+    // ignore
+  }
+  if (url) {
+    audio.src = url;
+  }
+  return audio;
+}
+
 // Global active audio session tracker to completely prevent duplicate or overlapping speech
 let currentAudioSession = 0;
 let activeAudioElement: HTMLAudioElement | null = null;
@@ -218,7 +236,7 @@ export const speakPortuguese = (text: string, rate = 1.0, onEnd?: () => void) =>
     }
 
     const url = candidateUrls[index];
-    const audio = new Audio(url);
+    const audio = createAudioElement(url);
     audio.playbackRate = rate;
     activeAudioElement = audio;
 
@@ -316,9 +334,8 @@ export async function prefetchAudio(audioIdentifier: string): Promise<void> {
   const url = resolveAudioUrl(audioIdentifier);
   if (!audioPlayerPool.has(url)) {
     try {
-      const audio = new Audio();
+      const audio = createAudioElement(url);
       audio.preload = 'auto';
-      audio.src = url;
       audioPlayerPool.set(url, audio);
     } catch {
       // ignore
@@ -345,7 +362,7 @@ export function playAudioFile(audioIdentifier: string, onEnd?: () => void): Prom
       let audio = audioPlayerPool.get(url);
 
       if (!audio) {
-        audio = new Audio(url);
+        audio = createAudioElement(url);
         audio.preload = 'auto';
         audioPlayerPool.set(url, audio);
       } else {
@@ -403,7 +420,7 @@ export async function playExerciseAudio(
   const sessionId = currentAudioSession;
 
   const url = resolveAudioUrl(exerciseId);
-  const audio = new Audio(url);
+  const audio = createAudioElement(url);
   audio.playbackRate = rate;
   activeAudioElement = audio;
 

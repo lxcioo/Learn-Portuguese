@@ -6,7 +6,7 @@ import path from 'path';
 import https from 'https';
 
 export default defineConfig({
-  base: process.env.BASE_URL || './',
+  base: process.env.BASE_URL || '/',
   plugins: [
     react(),
     tailwindcss(),

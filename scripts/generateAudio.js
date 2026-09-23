@@ -150,7 +150,7 @@ async function run() {
   console.log(`--- 🎧 Audio Generierung gestartet (Europäisches Portugiesisch pt-PT) ---`);
   console.log(`Zu verarbeitende Dateien: ${downloadTasks.length}`);
 
-  const CONCURRENCY = 12;
+  const CONCURRENCY = 4;
   let completed = 0;
   let index = 0;
 
@@ -162,6 +162,7 @@ async function run() {
       if (completed % 100 === 0 || completed === downloadTasks.length) {
         console.log(`[Audio PT-PT] Fortschritt: ${completed} / ${downloadTasks.length}`);
       }
+      await new Promise((r) => setTimeout(r, 60));
     }
   }
 
