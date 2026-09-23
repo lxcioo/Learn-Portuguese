@@ -1,0 +1,241 @@
+import content, { ensureContentLoaded } from '../data/content';
+import { Exercise, VocabDatabase } from '../types';
+import { ProgressService } from './ProgressService';
+import { StorageService } from './StorageService';
+import { NotificationService } from './NotificationService';
+
+const KEYS = {
+    PRACTICE_SESSION: 'currentPracticeSession',
+    GLOBAL_VOCAB: 'globalVocabDB',
+};
+
+// --- Hilfsfunktion: Veraltete Storage-Daten mit frischen JSON-Daten anreichern ---
+let _exerciseCache: Record<string, Exercise> | null = null;
+
+function getFreshExerciseMap(): Record<string, Exercise> {
+    if (_exerciseCache && Object.keys(_exerciseCache).length > 0) {
+        return _exerciseCache;
+    }
+    const map: Record<string, Exercise> = {};
+
+    // Iteriere durch den Content und baue ein Dictionary (Map) anhand der IDs auf
+    content.courses.forEach(course => {
+        course.units.forEach(unit => {
+            unit.levels?.forEach(level => {
+                level.exercises?.forEach(ex => {
+                    map[ex.id] = ex as Exercise;
+                });
+            });
+        });
+    });
+
+    if (Object.keys(map).length > 0) {
+        _exerciseCache = map;
+    }
+    return map;
+}
+
+async function enrichWithFreshData(exercises: Exercise[]): Promise<Exercise[]> {
+    let freshMap = getFreshExerciseMap();
+    if (Object.keys(freshMap).length === 0) {
+        await ensureContentLoaded();
+        freshMap = getFreshExerciseMap();
+    }
+    return exercises.map(ex => {
+        const freshData = freshMap[ex.id];
+        // Mergen: Frische Daten überschreiben alte Daten.
+        // So wird das fehlende 'vocabulary'-Array aus den statischen Dateien hinzugefügt.
+        return freshData ? { ...ex, ...freshData } : ex;
+    });
+}
+
+// --- Dynamische Zeitfenster (Fuzzing) ----
+function getRandomNextDate(box: number): string {
+    const now = new Date();
+    let minHours = 0;
+    let maxHours = 0;
+
+    switch (box) {
+        case 1: minHours = 12; maxHours = 24; break;
+        case 2: minHours = 72; maxHours = 120; break;
+        case 3: minHours = 240; maxHours = 336; break;
+        case 4: minHours = 1080; maxHours = 1440; break;
+        default: minHours = 12; maxHours = 24;
+    }
+
+    const randomHours = Math.random() * (maxHours - minHours) + minHours;
+    return new Date(now.getTime() + randomHours * 60 * 60 * 1000).toISOString();
+}
+
+export const LeitnerService = {
+  async trackResult(exercise: Exercise, isCorrect: boolean, source: string, userRating?: number) {
+    const db = (await StorageService.getItem<VocabDatabase>(KEYS.GLOBAL_VOCAB)) || {};
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+
+    let entry = db[exercise.id];
+    const wasNewEntry = !entry;
+    const wasDue = entry ? now >= new Date(entry.nextReviewDate) : true;
+
+    if (!entry) {
+      entry = {
+        exerciseId: exercise.id,
+        exerciseRef: exercise,
+        box: 0,
+        nextReviewDate: now.toISOString(),
+        mistakeCount: 0,
+        successCount: 0,
+        lastPracticed: '',
+        mistakesToday: 0,
+        solvedToday: 0
+      };
+    }
+
+    if (entry.lastPracticed !== todayStr) {
+      entry.mistakesToday = 0;
+      entry.solvedToday = 0;
+    }
+    entry.lastPracticed = todayStr;
+
+    if (isCorrect) {
+      entry.successCount++;
+      entry.solvedToday++;
+      if (source === 'practice') {
+        entry.mistakesToday = 0;
+      }
+    } else {
+      entry.mistakeCount++;
+      entry.mistakesToday++;
+    }
+
+    let targetBox = entry.box || 1;
+
+    if (!isCorrect) {
+      targetBox = 1;
+    } else {
+      if (source === 'lesson') {
+        if (entry.box === 0) targetBox = 1;
+      } else {
+        if (userRating) {
+          if (entry.box === 3 && userRating === 3) {
+            if (wasDue) { targetBox = 4; } else { targetBox = 3; }
+          } else if (entry.box === 4 && userRating === 3) {
+            targetBox = 4;
+          } else {
+            targetBox = userRating;
+          }
+        }
+      }
+    }
+
+    entry.box = targetBox;
+    entry.nextReviewDate = getRandomNextDate(targetBox);
+
+    db[exercise.id] = entry;
+    await StorageService.setItem(KEYS.GLOBAL_VOCAB, db);
+
+    const isLearned = isCorrect && (entry.solvedToday >= 3 || (entry.box > 0 && wasNewEntry));
+    await ProgressService.updateDailyStats(isCorrect, isLearned);
+
+    // Schedule local push notification reminder for Leitner Box 1
+    this.checkAndScheduleBox1Reminders();
+  },
+
+  /**
+   * Scans Leitner Box 1 and schedules gentle reminders before vocabulary expires
+   */
+  async checkAndScheduleBox1Reminders(): Promise<void> {
+    try {
+      const db = (await StorageService.getItem<VocabDatabase>(KEYS.GLOBAL_VOCAB)) || {};
+      const box1Entries = Object.values(db).filter(e => e.box === 1);
+      if (box1Entries.length === 0) return;
+
+      let earliestDate = new Date(box1Entries[0].nextReviewDate);
+      for (const entry of box1Entries) {
+        const d = new Date(entry.nextReviewDate);
+        if (d < earliestDate) {
+          earliestDate = d;
+        }
+      }
+
+      await NotificationService.scheduleLeitnerBox1Reminder(box1Entries.length, earliestDate);
+    } catch (e) {
+      console.warn('Error scheduling Leitner reminder:', e);
+    }
+  },
+
+  async recordExerciseResult(exercise: Exercise, isCorrect: boolean, userRating: number = 3) {
+    return this.trackResult(exercise, isCorrect, 'flashcard', userRating);
+  },
+
+  async getLeitnerStats(): Promise<number[]> {
+    const db = (await StorageService.getItem<VocabDatabase>(KEYS.GLOBAL_VOCAB)) || {};
+    const counts = [0, 0, 0, 0, 0];
+    Object.values(db).forEach(e => {
+      if (e.box >= 1 && e.box <= 4) counts[e.box]++;
+    });
+    return counts;
+  },
+
+  async getTodayMistakes(): Promise<Exercise[]> {
+    const db = (await StorageService.getItem<VocabDatabase>(KEYS.GLOBAL_VOCAB)) || {};
+    const today = new Date().toISOString().split('T')[0];
+    const exercises = Object.values(db)
+      .filter(e => e.lastPracticed === today && e.mistakesToday > 0)
+      .map(e => e.exerciseRef);
+
+    return enrichWithFreshData(exercises);
+  },
+
+  async getLeitnerDue(): Promise<Exercise[]> {
+    const db = (await StorageService.getItem<VocabDatabase>(KEYS.GLOBAL_VOCAB)) || {};
+    const nowISO = new Date().toISOString();
+    const exercises = Object.values(db)
+      .filter(e => e.nextReviewDate <= nowISO && e.box >= 1)
+      .map(e => e.exerciseRef);
+
+    return enrichWithFreshData(exercises);
+  },
+
+  async getArchEnemies(): Promise<Exercise[]> {
+    const db = (await StorageService.getItem<VocabDatabase>(KEYS.GLOBAL_VOCAB)) || {};
+    const exercises = Object.values(db)
+      .sort((a, b) => b.mistakeCount - a.mistakeCount)
+      .slice(0, 20)
+      .filter(e => e.mistakeCount > 0)
+      .map(e => e.exerciseRef);
+
+    return enrichWithFreshData(exercises);
+  },
+
+  async getFreeTrainingSelection(candidates: Exercise[], limit: number | 'all'): Promise<Exercise[]> {
+    const actualLimit = limit === 'all' ? candidates.length : limit;
+    const pool = [...candidates];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, actualLimit);
+  },
+
+  async savePracticeSession(exercises: Exercise[]) {
+    await StorageService.setItem(KEYS.PRACTICE_SESSION, exercises);
+  },
+
+  async getPracticeSession(): Promise<Exercise[] | null> {
+    return StorageService.getItem<Exercise[]>(KEYS.PRACTICE_SESSION);
+  },
+
+  async getVocabForBox(boxIndex: number): Promise<Exercise[]> {
+    const db = (await StorageService.getItem<VocabDatabase>(KEYS.GLOBAL_VOCAB)) || {};
+    const exercises = Object.values(db)
+      .filter(entry => entry.box === boxIndex)
+      .map(entry => entry.exerciseRef);
+
+    return enrichWithFreshData(exercises);
+  },
+
+  async getBoxWords(boxIndex: number): Promise<Exercise[]> {
+    return this.getVocabForBox(boxIndex);
+  },
+};

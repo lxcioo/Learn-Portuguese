@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25" />
+    </filter>
+  </defs>
+  <!-- Background with smooth rounded squircle -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  
+  <!-- Subtle Azulejo tile geometric pattern in background -->
+  <g opacity="0.08" stroke="#ffffff" stroke-width="4" fill="none">
+    <circle cx="256" cy="256" r="180" />
+    <circle cx="256" cy="256" r="120" />
+    <path d="M76 256 L436 256 M256 76 L256 436" />
+    <path d="M128 128 L384 384 M128 384 L384 128" />
+  </g>
+
+  <!-- Central Armillary / Rooster / Flag Emblem Hybrid -->
+  <g filter="url(#shadow)">
+    <!-- Golden Sun Circle -->
+    <circle cx="256" cy="236" r="110" fill="url(#goldGrad)" />
+    
+    <!-- Armillary Sphere Rings -->
+    <circle cx="256" cy="236" r="92" fill="none" stroke="#b45309" stroke-width="5" opacity="0.4" />
+    <ellipse cx="256" cy="236" rx="92" ry="40" fill="none" stroke="#b45309" stroke-width="5" opacity="0.4" />
+    <ellipse cx="256" cy="236" rx="40" ry="92" fill="none" stroke="#b45309" stroke-width="5" opacity="0.4" />
+    <line x1="190" y1="170" x2="322" y2="302" stroke="#b45309" stroke-width="5" opacity="0.5" />
+
+    <!-- Portuguese Shield in Center -->
+    <path d="M 230 200 L 282 200 L 282 245 C 282 270 256 285 256 285 C 256 285 230 270 230 245 Z" fill="#ffffff" stroke="#dc2626" stroke-width="4" />
+    <path d="M 240 212 L 272 212 L 272 240 C 272 255 256 265 256 265 C 256 265 240 255 240 240 Z" fill="#2563eb" />
+    <!-- 5 Quinas white dots -->
+    <circle cx="256" cy="224" r="3.5" fill="#ffffff" />
+    <circle cx="249" cy="233" r="3" fill="#ffffff" />
+    <circle cx="263" cy="233" r="3" fill="#ffffff" />
+    <circle cx="252" cy="244" r="3" fill="#ffffff" />
+    <circle cx="260" cy="244" r="3" fill="#ffffff" />
+  </g>
+
+  <!-- Clean modern text label at bottom -->
+  <text x="256" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="1">PORTUGUÊS</text>
+  <text x="256" y="445" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600" fill="#a7f3d0" text-anchor="middle" letter-spacing="3">IMERSÃO &amp; DIÁLOGOS</text>
+</svg>

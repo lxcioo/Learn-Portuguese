@@ -1,0 +1,38 @@
+{
+  "name": "learnportuguese",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 3000",
+    "build": "node scripts/buildPublicContent.js && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 3000",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "generate-audio": "node scripts/generateAudio.js"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.1",
+    "canvas-confetti": "^1.9.4",
+    "fuse.js": "^7.3.0",
+    "google-tts-api": "^0.0.6",
+    "lucide-react": "^1.47.0",
+    "motion": "^13.4.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0",
+    "vite-plugin-pwa": "^1.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^26.6.2",
+    "@types/react": "~19.1.0",
+    "@types/react-dom": "~19.1.0",
+    "eslint": "^9.25.0",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.70.1"
+  },
+  "private": true
+}

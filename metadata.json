@@ -1,0 +1,8 @@
+{
+  "name": "LearnPortuguese",
+  "description": "Learn authentic Portuguese with real-world dialogues, sentence patterns, ear training, and offline spaced repetition for iOS and Android.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

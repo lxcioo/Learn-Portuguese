@@ -1,0 +1,816 @@
+{
+    "id": "unit_6",
+    "title": "Kapitel 6: Zeit & Tagesablauf",
+    "color": "#f39c12",
+    "levels": [
+        {
+            "id": "u6_l1",
+            "title": "Uhrzeiten & Tageszeiten",
+            "exercises": [
+                {
+                    "id": "u6_l1_e1",
+                    "type": "translate_to_de",
+                    "question": "Que horas são?",
+                    "correctAnswer": "Wie spät ist es",
+                    "alternativeAnswers": [
+                        "Wie spät ist es?"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Que horas são",
+                            "translation": "Wie spät ist es",
+                            "audio": "Que horas são"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e2",
+                    "type": "translate_to_pt",
+                    "question": "Es ist ein Uhr",
+                    "correctAnswer": "É uma hora",
+                    "vocabulary": [
+                        {
+                            "text": "Es ist",
+                            "translation": "É",
+                            "audio": "É"
+                        },
+                        {
+                            "text": "ein Uhr",
+                            "translation": "uma hora",
+                            "audio": "uma hora"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e3",
+                    "type": "multiple_choice",
+                    "question": "Wie sagt man 'Es ist zwei Uhr'?",
+                    "correctAnswer": "São duas horas",
+                    "options": [
+                        "São dois horas",
+                        "É duas horas",
+                        "São duas horas"
+                    ],
+                    "correctAnswerIndex": 2,
+                    "audioText": "São duas horas",
+                    "vocabulary": [
+                        {
+                            "text": "Es ist zwei Uhr",
+                            "translation": "São duas horas",
+                            "audio": "São duas horas"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e4",
+                    "type": "translate_to_de",
+                    "question": "Meio-dia",
+                    "correctAnswer": "Mittag",
+                    "alternativeAnswers": [
+                        "Der Mittag"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Meio-dia",
+                            "translation": "Mittag",
+                            "audio": "Meio-dia"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e5",
+                    "type": "translate_to_pt",
+                    "question": "Mitternacht",
+                    "correctAnswer": "Meia-noite",
+                    "alternativeAnswers": [
+                        "A meia-noite"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Mitternacht",
+                            "translation": "Meia-noite",
+                            "audio": "Meia-noite"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e6",
+                    "type": "translate_to_de",
+                    "question": "A que horas?",
+                    "correctAnswer": "Um wie viel Uhr",
+                    "alternativeAnswers": [
+                        "Wann?"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "A que horas",
+                            "translation": "Um wie viel Uhr",
+                            "audio": "A que horas"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e7",
+                    "type": "translate_to_pt",
+                    "question": "Um acht Uhr",
+                    "correctAnswer": "Às oito horas",
+                    "alternativeAnswers": [
+                        "As oito horas",
+                        "Às oito"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Um",
+                            "translation": "Às",
+                            "audio": "Às"
+                        },
+                        {
+                            "text": "acht Uhr",
+                            "translation": "oito horas",
+                            "audio": "oito horas"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e8",
+                    "type": "multiple_choice",
+                    "question": "Wie sagt man 'Viertel nach' (z.B. Viertel nach drei)?",
+                    "correctAnswer": "E um quarto",
+                    "options": [
+                        "Menos um quarto",
+                        "E meia",
+                        "E um quarto"
+                    ],
+                    "correctAnswerIndex": 2,
+                    "audioText": "E um quarto",
+                    "vocabulary": [
+                        {
+                            "text": "Viertel nach",
+                            "translation": "E um quarto",
+                            "audio": "E um quarto"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e9",
+                    "type": "translate_to_de",
+                    "question": "Cinco e meia",
+                    "correctAnswer": "Halb sechs",
+                    "alternativeAnswers": [
+                        "5 Uhr 30",
+                        "5 Uhr 30 Minuten",
+                        "5:30 Uhr",
+                        "5:30"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "E",
+                            "translation": "Und",
+                            "audio": "E"
+                        },
+                        {
+                            "text": "meia",
+                            "translation": "halb",
+                            "audio": "meia"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e10",
+                    "type": "translate_to_pt",
+                    "question": "Viertel vor",
+                    "correctAnswer": "Menos um quarto",
+                    "vocabulary": [
+                        {
+                            "text": "Viertel vor",
+                            "translation": "Menos um quarto",
+                            "audio": "Menos um quarto"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e11",
+                    "type": "translate_to_de",
+                    "question": "De manhã",
+                    "correctAnswer": "Morgens",
+                    "alternativeAnswers": [
+                        "Am Morgen"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "De manhã",
+                            "translation": "Morgens",
+                            "audio": "De manhã"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e12",
+                    "type": "translate_to_pt",
+                    "question": "Am Nachmittag",
+                    "correctAnswer": "À tarde",
+                    "alternativeAnswers": [
+                        "De tarde"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Am Nachmittag",
+                            "translation": "À tarde",
+                            "audio": "À tarde"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e13",
+                    "type": "translate_to_de",
+                    "question": "À noite",
+                    "correctAnswer": "Nachts",
+                    "alternativeAnswers": [
+                        "Am Abend",
+                        "Abends"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "À noite",
+                            "translation": "Nachts",
+                            "audio": "À noite"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e14",
+                    "type": "translate_to_pt",
+                    "question": "Heute Morgen",
+                    "correctAnswer": "Hoje de manhã",
+                    "vocabulary": [
+                        {
+                            "text": "Heute",
+                            "translation": "Hoje",
+                            "audio": "Hoje"
+                        },
+                        {
+                            "text": "Morgen",
+                            "translation": "de manhã",
+                            "audio": "de manhã"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l1_e15",
+                    "type": "multiple_choice",
+                    "question": "Was heißt 'Gestern Abend'?",
+                    "correctAnswer": "Ontem à noite",
+                    "options": [
+                        "Hoje à noite",
+                        "Ontem à noite",
+                        "Amanhã de manhã"
+                    ],
+                    "correctAnswerIndex": 1,
+                    "audioText": "Ontem à noite",
+                    "vocabulary": [
+                        {
+                            "text": "Gestern Abend",
+                            "translation": "Ontem à noite",
+                            "audio": "Ontem à noite"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "u6_l2",
+            "title": "Wochentage & Zeitangaben",
+            "exercises": [
+                {
+                    "id": "u6_l2_e1",
+                    "type": "translate_to_de",
+                    "question": "A semana",
+                    "correctAnswer": "Die Woche",
+                    "vocabulary": [
+                        {
+                            "text": "A semana",
+                            "translation": "Die Woche",
+                            "audio": "A semana"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e2",
+                    "type": "translate_to_pt",
+                    "question": "Montag",
+                    "correctAnswer": "Segunda-feira",
+                    "alternativeAnswers": [
+                        "Segunda"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Montag",
+                            "translation": "Segunda-feira",
+                            "audio": "Segunda-feira"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e3",
+                    "type": "multiple_choice",
+                    "question": "Wähle 'Dienstag'",
+                    "correctAnswer": "Terça-feira",
+                    "options": [
+                        "Segunda-feira",
+                        "Terça-feira",
+                        "Quarta-feira"
+                    ],
+                    "correctAnswerIndex": 1,
+                    "audioText": "Terça-feira",
+                    "vocabulary": [
+                        {
+                            "text": "Dienstag",
+                            "translation": "Terça-feira",
+                            "audio": "Terça-feira"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e4",
+                    "type": "translate_to_de",
+                    "question": "Quarta-feira",
+                    "correctAnswer": "Mittwoch",
+                    "vocabulary": [
+                        {
+                            "text": "Quarta-feira",
+                            "translation": "Mittwoch",
+                            "audio": "Quarta-feira"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e5",
+                    "type": "translate_to_pt",
+                    "question": "Donnerstag",
+                    "correctAnswer": "Quinta-feira",
+                    "alternativeAnswers": [
+                        "Quinta"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Donnerstag",
+                            "translation": "Quinta-feira",
+                            "audio": "Quinta-feira"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e6",
+                    "type": "translate_to_de",
+                    "question": "Sexta-feira",
+                    "correctAnswer": "Freitag",
+                    "vocabulary": [
+                        {
+                            "text": "Sexta-feira",
+                            "translation": "Freitag",
+                            "audio": "Sexta-feira"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e7",
+                    "type": "translate_to_pt",
+                    "question": "Samstag",
+                    "correctAnswer": "Sábado",
+                    "vocabulary": [
+                        {
+                            "text": "Samstag",
+                            "translation": "Sábado",
+                            "audio": "Sábado"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e8",
+                    "type": "translate_to_de",
+                    "question": "Domingo",
+                    "correctAnswer": "Sonntag",
+                    "vocabulary": [
+                        {
+                            "text": "Domingo",
+                            "translation": "Sonntag",
+                            "audio": "Domingo"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e9",
+                    "type": "multiple_choice",
+                    "question": "Was ist 'O fim de semana'?",
+                    "correctAnswer": "Das Wochenende",
+                    "options": [
+                        "Der Feierabend",
+                        "Das Wochenende",
+                        "Der Urlaub"
+                    ],
+                    "correctAnswerIndex": 1,
+                    "audioText": "O fim de semana",
+                    "optionsLanguage": "de",
+                    "vocabulary": [
+                        {
+                            "text": "Das Wochenende",
+                            "translation": "O fim de semana",
+                            "audio": "O fim de semana"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e10",
+                    "type": "translate_to_pt",
+                    "question": "Der Monat",
+                    "correctAnswer": "O mês",
+                    "vocabulary": [
+                        {
+                            "text": "Der Monat",
+                            "translation": "O mês",
+                            "audio": "O mês"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e11",
+                    "type": "translate_to_de",
+                    "question": "O ano",
+                    "correctAnswer": "Das Jahr",
+                    "vocabulary": [
+                        {
+                            "text": "O ano",
+                            "translation": "Das Jahr",
+                            "audio": "O ano"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e12",
+                    "type": "translate_to_pt",
+                    "question": "Nächste Woche",
+                    "correctAnswer": "Na próxima semana",
+                    "alternativeAnswers": [
+                        "Para a semana"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Nächste Woche",
+                            "translation": "Na próxima semana",
+                            "audio": "Na próxima semana"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e13",
+                    "type": "translate_to_de",
+                    "question": "O ano passado",
+                    "correctAnswer": "Letztes Jahr",
+                    "alternativeAnswers": [
+                        "Das letzte Jahr"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "O ano passado",
+                            "translation": "Letztes Jahr",
+                            "audio": "O ano passado"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e14",
+                    "type": "translate_to_pt",
+                    "question": "Gestern, heute, morgen",
+                    "correctAnswer": "Ontem, hoje, amanhã",
+                    "alternativeAnswers": [
+                        "Ontem hoje amanhã"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Gestern",
+                            "translation": "Ontem",
+                            "audio": "Ontem"
+                        },
+                        {
+                            "text": "heute",
+                            "translation": "hoje",
+                            "audio": "hoje"
+                        },
+                        {
+                            "text": "morgen",
+                            "translation": "amanhã",
+                            "audio": "amanhã"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l2_e15",
+                    "type": "translate_to_pt",
+                    "question": "Jeden Tag",
+                    "correctAnswer": "Todos os dias",
+                    "vocabulary": [
+                        {
+                            "text": "Jeden Tag",
+                            "translation": "Todos os dias",
+                            "audio": "Todos os dias"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "u6_l3",
+            "title": "Die tägliche Routine",
+            "exercises": [
+                {
+                    "id": "u6_l3_e1",
+                    "type": "translate_to_de",
+                    "question": "Acordar",
+                    "correctAnswer": "Aufwachen",
+                    "vocabulary": [
+                        {
+                            "text": "Acordar",
+                            "translation": "Aufwachen",
+                            "audio": "Acordar"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e2",
+                    "type": "translate_to_pt",
+                    "question": "Aufstehen",
+                    "correctAnswer": "Levantar-se",
+                    "alternativeAnswers": [
+                        "Se levantar"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Aufstehen",
+                            "translation": "Levantar-se",
+                            "audio": "Levantar-se"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e3",
+                    "type": "translate_to_de",
+                    "question": "Eu levanto-me",
+                    "correctAnswer": "Ich stehe auf",
+                    "alternativeAnswers": [
+                        "Ich stehe morgens auf"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Eu",
+                            "translation": "Ich",
+                            "audio": "Eu"
+                        },
+                        {
+                            "text": "levanto-me",
+                            "translation": "stehe auf",
+                            "audio": "levanto-me"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e4",
+                    "type": "multiple_choice",
+                    "question": "Wie heißt 'Frühstücken' in Portugal?",
+                    "correctAnswer": "Tomar o pequeno-almoço",
+                    "options": [
+                        "Tomar o pequeno-almoço",
+                        "Almoçar",
+                        "Tomar café da manhã (Brasilien)"
+                    ],
+                    "correctAnswerIndex": 0,
+                    "audioText": "Tomar o pequeno-almoço",
+                    "vocabulary": [
+                        {
+                            "text": "Frühstücken",
+                            "translation": "Tomar o pequeno-almoço",
+                            "audio": "Tomar o pequeno-almoço"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e5",
+                    "type": "translate_to_pt",
+                    "question": "Duschen",
+                    "correctAnswer": "Tomar banho",
+                    "vocabulary": [
+                        {
+                            "text": "Duschen",
+                            "translation": "Tomar banho",
+                            "audio": "Tomar banho"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e6",
+                    "type": "translate_to_de",
+                    "question": "Escovar os dentes",
+                    "correctAnswer": "Die Zähne putzen",
+                    "alternativeAnswers": [
+                        "Zähne putzen",
+                        "Lavar os dentes"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Escovar os dentes",
+                            "translation": "Die Zähne putzen",
+                            "audio": "Escovar os dentes"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e7",
+                    "type": "translate_to_pt",
+                    "question": "Sich anziehen",
+                    "correctAnswer": "Vestir-se",
+                    "alternativeAnswers": [
+                        "Se vestir"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Sich anziehen",
+                            "translation": "Vestir-se / Se vestir",
+                            "audio": "Vestir-se"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e8",
+                    "type": "translate_to_de",
+                    "question": "Ir para o trabalho",
+                    "correctAnswer": "Zur Arbeit gehen",
+                    "vocabulary": [
+                        {
+                            "text": "Ir para",
+                            "translation": "Zur",
+                            "audio": "Ir para"
+                        },
+                        {
+                            "text": "o trabalho",
+                            "translation": "Arbeit gehen",
+                            "audio": "o trabalho"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e9",
+                    "type": "multiple_choice",
+                    "question": "Was heißt 'Zu Mittag essen'?",
+                    "correctAnswer": "Almoçar",
+                    "options": [
+                        "Jantar",
+                        "Lanchar",
+                        "Almoçar"
+                    ],
+                    "correctAnswerIndex": 2,
+                    "audioText": "Almoçar",
+                    "vocabulary": [
+                        {
+                            "text": "Zu Mittag essen",
+                            "translation": "Almoçar",
+                            "audio": "Almoçar"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e10",
+                    "type": "translate_to_pt",
+                    "question": "Anfangen",
+                    "correctAnswer": "Começar",
+                    "vocabulary": [
+                        {
+                            "text": "Anfangen",
+                            "translation": "Começar",
+                            "audio": "Começar"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e11",
+                    "type": "translate_to_de",
+                    "question": "Terminar o trabalho",
+                    "correctAnswer": "Die Arbeit beenden",
+                    "alternativeAnswers": [
+                        "Aufhören zu arbeiten"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Terminar",
+                            "translation": "beenden",
+                            "audio": "Terminar"
+                        },
+                        {
+                            "text": "o trabalho",
+                            "translation": "Die Arbeit",
+                            "audio": "o trabalho"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e12",
+                    "type": "translate_to_pt",
+                    "question": "Nach Hause zurückkehren",
+                    "correctAnswer": "Voltar para casa",
+                    "alternativeAnswers": [
+                        "Regressar a casa"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "zurückkehren",
+                            "translation": "Voltar",
+                            "audio": "Voltar"
+                        },
+                        {
+                            "text": "Nach Hause",
+                            "translation": "para casa",
+                            "audio": "para casa"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e13",
+                    "type": "translate_to_de",
+                    "question": "Jantar",
+                    "correctAnswer": "Zu Abend essen",
+                    "alternativeAnswers": [
+                        "Abendessen"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Jantar",
+                            "translation": "Zu Abend essen",
+                            "audio": "Jantar"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e14",
+                    "type": "translate_to_pt",
+                    "question": "Fernsehen",
+                    "correctAnswer": "Ver televisão",
+                    "alternativeAnswers": [
+                        "Ver a televisão",
+                        "Assistir televisão"
+                    ],
+                    "vocabulary": [
+                        {
+                            "text": "Fernsehen",
+                            "translation": "Ver televisão",
+                            "audio": "Ver televisão"
+                        }
+                    ]
+                },
+                {
+                    "id": "u6_l3_e15",
+                    "type": "translate_to_pt",
+                    "question": "Ins Bett gehen",
+                    "correctAnswer": "Ir para a cama",
+                    "vocabulary": [
+                        {
+                            "text": "Ins Bett",
+                            "translation": "para a cama",
+                            "audio": "para a cama"
+                        },
+                        {
+                            "text": "gehen",
+                            "translation": "Ir",
+                            "audio": "Ir"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "grammarGuide": [
+        {
+            "heading": "Verben auf '-er' und '-ir'",
+            "explanation": "Neben '-ar' gibt es zwei weitere regelmäßige Verbgruppen. Sie funktionieren ähnlich, nur mit 'e' oder 'i' in der Endung.",
+            "examples": [
+                "comer (essen): eu como, tu comes, ele come, nós comemos, eles comem",
+                "abrir (öffnen): eu abro, tu abres, ele abre, nós abrimos, eles abrem"
+            ]
+        },
+        {
+            "heading": "Reflexive Verben in Portugal (Enklise mit Bindestrich)",
+            "explanation": "Im europäischen Portugiesisch (pt-PT) werden Reflexivpronomen (me, te, se, nos) im normalen Aussagesatz mit einem Bindestrich HINTER das Verb gehängt (Enklise). Das ist einer der auffälligsten Unterschiede zum brasilianischen Portugiesisch.",
+            "examples": [
+                "Eu levanto-me às sete horas. (Ich stehe um 7 Uhr auf.)",
+                "Ele chama-se João. (Er heißt João.)",
+                "Nós vestimo-nos rapidamente. (Wir ziehen uns schnell an.)"
+            ]
+        },
+        {
+            "heading": "Uhrzeiten (Que horas são?)",
+            "explanation": "Um nach der Uhrzeit zu fragen oder sie zu nennen, nutzt man den Plural des Verbs 'ser' (außer bei 1 Uhr).",
+            "examples": [
+                "É uma hora. (Es ist ein Uhr. - Singular!)",
+                "São duas horas. (Es ist zwei Uhr. - Plural)",
+                "São dez e meia. (Es ist halb elf. / wörtl: 10 und eine halbe)"
+            ]
+        }
+    ]
+}
